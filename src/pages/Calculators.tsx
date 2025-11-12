@@ -3,8 +3,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/Button';
 import { PlasmicCalculator } from '@/components/calculators/PlasmicCalculator';
 import { DICCalculator } from '@/components/calculators/DICalculator';
+import { CoagulationPanelSimulator } from '@/components/lab/CoagulationPanelSimulator';
 
-type CalculatorType = 'plasmic' | 'dic' | null;
+type CalculatorType = 'plasmic' | 'dic' | 'coag' | null;
 
 export function Calculators() {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType>(null);
@@ -24,6 +25,13 @@ export function Calculators() {
       version: 'v2001',
       useCase: 'Identifies overt disseminated intravascular coagulation',
     },
+    {
+      id: 'coag' as const,
+      name: 'Coagulation Panel Simulator',
+      description: 'Pattern recognition and interpretation',
+      version: 'Interactive',
+      useCase: 'Analyzes coagulation studies to differentiate consumptive vs other coagulopathies',
+    },
   ];
 
   if (activeCalculator) {
@@ -36,6 +44,7 @@ export function Calculators() {
         </div>
         {activeCalculator === 'plasmic' && <PlasmicCalculator />}
         {activeCalculator === 'dic' && <DICCalculator />}
+        {activeCalculator === 'coag' && <CoagulationPanelSimulator />}
       </div>
     );
   }
