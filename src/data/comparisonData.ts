@@ -1,0 +1,167 @@
+import type { ComparisonTableRow } from '@/types';
+
+export const syndromeComparison: ComparisonTableRow[] = [
+  {
+    category: 'Typical Triggers',
+    DIC: ['Sepsis', 'Trauma', 'Malignancy', 'Obstetric complications', 'Severe pancreatitis'],
+    TTP: ['Idiopathic (50%)', 'Drug-induced (clopidogrel, ticlopidine)', 'Pregnancy', 'HIV', 'Autoimmune disorders'],
+    ITP: ['Idiopathic (primary)', 'Viral infections', 'H. pylori', 'Autoimmune conditions', 'Post-vaccination (rare)'],
+    HUS: ['STEC (Shiga toxin E. coli)', 'Atypical (complement dysregulation)', 'Drug-induced (quinine, cyclosporine)', 'Pregnancy-associated'],
+  },
+  {
+    category: 'Platelet Count',
+    DIC: 'Usually 50-100 × 10⁹/L, may be lower in severe cases',
+    TTP: 'Typically <30 × 10⁹/L, often <20 × 10⁹/L',
+    ITP: 'Variable, often <30 × 10⁹/L, can be <10 × 10⁹/L in acute cases',
+    HUS: 'Usually <150 × 10⁹/L, typically 50-100 × 10⁹/L',
+  },
+  {
+    category: 'Hemolysis',
+    DIC: 'Variable; microangiopathic features may be present but often absent',
+    TTP: 'Severe MAHA with numerous schistocytes (>1% RBCs)',
+    ITP: 'No hemolysis; isolated thrombocytopenia',
+    HUS: 'Severe MAHA with schistocytes',
+  },
+  {
+    category: 'PT/INR',
+    DIC: 'Prolonged (consumptive coagulopathy)',
+    TTP: 'Normal',
+    ITP: 'Normal',
+    HUS: 'Normal',
+  },
+  {
+    category: 'aPTT',
+    DIC: 'Usually prolonged',
+    TTP: 'Normal',
+    ITP: 'Normal',
+    HUS: 'Normal',
+  },
+  {
+    category: 'Fibrinogen',
+    DIC: 'Low (<100 mg/dL in severe cases)',
+    TTP: 'Normal',
+    ITP: 'Normal',
+    HUS: 'Normal',
+  },
+  {
+    category: 'D-dimer',
+    DIC: 'Markedly elevated (>5× upper limit)',
+    TTP: 'May be mildly elevated',
+    ITP: 'Normal',
+    HUS: 'May be mildly elevated',
+  },
+  {
+    category: 'LDH',
+    DIC: 'Elevated (moderate)',
+    TTP: 'Markedly elevated (often >1000 U/L)',
+    ITP: 'Normal or mildly elevated',
+    HUS: 'Elevated (moderate to high)',
+  },
+  {
+    category: 'Haptoglobin',
+    DIC: 'Low if hemolysis present',
+    TTP: 'Undetectable or very low',
+    ITP: 'Normal',
+    HUS: 'Undetectable or very low',
+  },
+  {
+    category: 'Peripheral Smear',
+    DIC: 'Variable schistocytes, may see other RBC abnormalities',
+    TTP: 'Numerous schistocytes, polychromasia',
+    ITP: 'Large platelets, no schistocytes',
+    HUS: 'Schistocytes, helmet cells',
+  },
+  {
+    category: 'Renal Involvement',
+    DIC: 'Possible (AKI from hypoperfusion/microthrombi)',
+    TTP: 'Present in ~50%, usually mild',
+    ITP: 'Absent',
+    HUS: 'Prominent (AKI is hallmark feature)',
+  },
+  {
+    category: 'Neurologic Involvement',
+    DIC: 'Possible with severe disease',
+    TTP: 'Present in 50-90% (headache, confusion, stroke, seizures)',
+    ITP: 'Only if ICH from severe thrombocytopenia',
+    HUS: 'Less common (~30%), more common in aHUS',
+  },
+  {
+    category: 'Fever',
+    DIC: 'Present if underlying infection',
+    TTP: 'May be present (classic pentad: fever, thrombocytopenia, MAHA, renal, neuro)',
+    ITP: 'Absent (unless concurrent infection)',
+    HUS: 'May precede syndrome (especially STEC-HUS with diarrhea)',
+  },
+  {
+    category: 'ADAMTS13 Activity',
+    DIC: 'Normal or mildly reduced',
+    TTP: 'Severely reduced (<10% in acquired TTP)',
+    ITP: 'Normal',
+    HUS: 'Normal or mildly reduced',
+  },
+  {
+    category: 'Complement Studies',
+    DIC: 'Normal',
+    TTP: 'Normal',
+    ITP: 'Normal',
+    HUS: 'Abnormal in atypical HUS (aHUS) - low C3, elevated sC5b-9',
+  },
+  {
+    category: 'Primary Treatment',
+    DIC: ['Treat underlying cause', 'Blood product support (FFP, cryoprecipitate, platelets)', 'Avoid platelet transfusion unless active bleeding or procedure'],
+    TTP: ['URGENT plasma exchange (PLEX)', 'Corticosteroids', 'Caplacizumab (anti-vWF)', 'Rituximab for refractory cases'],
+    ITP: ['Corticosteroids (first-line)', 'IVIG', 'Anti-D immunoglobulin (Rh+ patients)', 'Thrombopoietin receptor agonists', 'Splenectomy (refractory)'],
+    HUS: ['STEC-HUS: Supportive care (hydration, dialysis if needed)', 'Avoid antibiotics in STEC-HUS', 'aHUS: Eculizumab (C5 inhibitor)', 'Plasma exchange may be used in aHUS'],
+  },
+  {
+    category: 'Key Don\'t Miss',
+    DIC: 'Do not delay treatment of underlying condition; bleeding risk with procedures',
+    TTP: 'DO NOT DELAY PLASMA EXCHANGE - mortality risk if untreated; avoid platelet transfusion',
+    ITP: 'ICH risk with severe thrombocytopenia; fall precautions',
+    HUS: 'Do NOT give antibiotics in STEC-HUS (increases toxin release); monitor renal function closely',
+  },
+];
+
+export const diagnosticCriteria = {
+  DIC: {
+    title: 'ISTH Overt DIC Score',
+    version: '2001',
+    criteria: [
+      'Risk assessment: Does patient have underlying disorder known to be associated with DIC?',
+      'Platelet count: >100 = 0 pts; <100 = 1 pt; <50 = 2 pts',
+      'D-dimer: No increase = 0 pts; Moderate increase = 2 pts; Strong increase = 3 pts',
+      'PT prolongation: <3 sec = 0 pts; 3-6 sec = 1 pt; >6 sec = 2 pts',
+      'Fibrinogen: >100 mg/dL = 0 pts; <100 mg/dL = 1 pt',
+    ],
+    interpretation: '≥5 points = Compatible with overt DIC',
+    references: [
+      {
+        id: 'isth-2001',
+        citation: 'Taylor FB Jr, et al. Towards definition, clinical and laboratory criteria, and a scoring system for disseminated intravascular coagulation. Thromb Haemost. 2001;86(5):1327-1330.',
+        year: 2001,
+      },
+    ],
+  },
+  PLASMIC: {
+    title: 'PLASMIC Score for TTP',
+    version: '2017',
+    criteria: [
+      'Platelet count <30 × 10⁹/L: 1 point',
+      'Hemolysis (reticulocyte count >2.5%, undetectable haptoglobin, or indirect bilirubin >2 mg/dL): 1 point',
+      'No active cancer: 1 point',
+      'No history of solid-organ or stem-cell transplant: 1 point',
+      'MCV <90 fL: 1 point',
+      'INR <1.5: 1 point',
+      'Creatinine <2.0 mg/dL: 1 point',
+    ],
+    interpretation: 'Low risk (0-4): <5% likelihood of ADAMTS13 <10%; Intermediate (5): 5-24% likelihood; High risk (6-7): >70% likelihood',
+    note: 'High PLASMIC score (6-7) warrants urgent empiric plasma exchange while awaiting ADAMTS13 results',
+    references: [
+      {
+        id: 'bendapudi-2017',
+        citation: 'Bendapudi PK, et al. Derivation and external validation of the PLASMIC score for rapid assessment of adults with thrombotic microangiopathies: a cohort study. Lancet Haematol. 2017;4(4):e157-e164.',
+        year: 2017,
+      },
+    ],
+  },
+};
