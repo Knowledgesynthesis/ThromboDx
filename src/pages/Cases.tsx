@@ -1,86 +1,129 @@
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/Alert';
+import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { CaseViewer } from '@/components/cases/CaseViewer';
+import { cases } from '@/data/casesData';
+import type { Case } from '@/types';
+import { useAppStore } from '@/store';
 
 export function Cases() {
+  const [selectedCase, setSelectedCase] = useState<Case | null>(null);
+  const { progress } = useAppStore();
+
+  const getDifficultyColor = (difficulty: Case['difficulty']) => {
+    switch (difficulty) {
+      case 'beginner':
+        return 'success';
+      case 'intermediate':
+        return 'warning';
+      case 'advanced':
+        return 'destructive';
+      default:
+        return 'outline';
+    }
+  };
+
+  if (selectedCase) {
+    return (
+      <div className="space-y-6">
+        <Button variant="outline" onClick={() => setSelectedCase(null)}>
+          ← Back to Cases
+        </Button>
+        <CaseViewer caseData={selectedCase} onComplete={() => setSelectedCase(null)} />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold mb-2">Clinical Cases</h1>
         <p className="text-muted-foreground">
-          Real-world scenarios with branching decision paths
+          Interactive scenarios with branching decision paths and real-time feedback
         </p>
       </div>
 
-      <Alert variant="info">
-        <AlertTitle>Coming Soon</AlertTitle>
-        <AlertDescription>
-          Interactive case studies are under development. These will include time-based clinical
-          scenarios with lab results, imaging, and decision points.
-        </AlertDescription>
-      </Alert>
-
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="opacity-60">
-          <CardHeader>
-            <div className="flex items-start justify-between mb-2">
-              <CardTitle className="text-lg">Sepsis-Associated DIC</CardTitle>
-              <Badge variant="outline">Advanced</Badge>
-            </div>
-            <CardDescription>
-              48-year-old with pneumosepsis developing coagulopathy
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Coming soon: Navigate through a complete ICU course with evolving labs and treatment decisions.
-          </CardContent>
-        </Card>
+        {cases.map((caseItem) => {
+          const isCompleted = progress.completedCases.includes(caseItem.id);
 
-        <Card className="opacity-60">
-          <CardHeader>
-            <div className="flex items-start justify-between mb-2">
-              <CardTitle className="text-lg">Pregnancy-Associated TTP</CardTitle>
-              <Badge variant="outline">Intermediate</Badge>
-            </div>
-            <CardDescription>
-              32-year-old at 28 weeks gestation with thrombocytopenia
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Coming soon: Differentiate from HELLP syndrome and make urgent treatment decisions.
-          </CardContent>
-        </Card>
+          return (
+            <Card
+              key={caseItem.id}
+              className="hover:shadow-lg transition-shadow relative"
+            >
+              {isCompleted && (
+                <div className="absolute top-3 right-3">
+                  <Badge variant="success">✓ Completed</Badge>
+                </div>
+              )}
+              <CardHeader>
+                <div className="flex items-start justify-between mb-2">
+                  <CardTitle className="text-lg pr-24">{caseItem.title}</CardTitle>
+                  <Badge variant={getDifficultyColor(caseItem.difficulty)}>
+                    {caseItem.difficulty}
+                  </Badge>
+                </div>
+                <CardDescription>{caseItem.scenario}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">{caseItem.syndrome}</Badge>
+                  {caseItem.learnerLevel.map((level) => (
+                    <Badge key={level} variant="secondary" className="text-xs">
+                      {level}
+                    </Badge>
+                  ))}
+                </div>
 
-        <Card className="opacity-60">
-          <CardHeader>
-            <div className="flex items-start justify-between mb-2">
-              <CardTitle className="text-lg">Pediatric STEC-HUS</CardTitle>
-              <Badge variant="outline">Beginner</Badge>
-            </div>
-            <CardDescription>
-              5-year-old with bloody diarrhea and acute kidney injury
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Coming soon: Learn supportive care principles and antibiotic stewardship.
-          </CardContent>
-        </Card>
+                <div className="text-sm text-muted-foreground">
+                  <p className="font-medium mb-1">Learning objectives:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    {caseItem.learningObjectives.slice(0, 2).map((obj, idx) => (
+                      <li key={idx}>{obj}</li>
+                    ))}
+                    {caseItem.learningObjectives.length > 2 && (
+                      <li className="text-xs">
+                        +{caseItem.learningObjectives.length - 2} more...
+                      </li>
+                    )}
+                  </ul>
+                </div>
 
-        <Card className="opacity-60">
-          <CardHeader>
-            <div className="flex items-start justify-between mb-2">
-              <CardTitle className="text-lg">Refractory ITP</CardTitle>
-              <Badge variant="outline">Intermediate</Badge>
-            </div>
-            <CardDescription>
-              40-year-old with persistent thrombocytopenia
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Coming soon: Explore second and third-line treatment options.
-          </CardContent>
-        </Card>
+                <Button
+                  onClick={() => setSelectedCase(caseItem)}
+                  className="w-full"
+                >
+                  {isCompleted ? 'Review Case' : 'Start Case'}
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>About These Cases</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          <p className="text-muted-foreground">
+            Each case presents a real-world clinical scenario with branching decision points.
+            You'll receive immediate feedback on your choices and learn key clinical pearls.
+          </p>
+          <div className="pt-3 border-t">
+            <h4 className="font-semibold mb-2">Case Features:</h4>
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+              <li>Time-based clinical progression</li>
+              <li>Real lab values and imaging findings</li>
+              <li>Multiple decision points with feedback</li>
+              <li>Comprehensive debrief with references</li>
+              <li>Progress tracking and completion status</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
 import { Compare } from '@/pages/Compare';
 import { Calculators } from '@/pages/Calculators';
@@ -42,18 +43,21 @@ function App() {
         <Header />
         <div className="flex">
           <Sidebar />
-          <main id="main-content" className="flex-1 p-6 md:p-8 lg:p-10" role="main">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/compare" element={<Compare />} />
-              <Route path="/calculators" element={<Calculators />} />
-              <Route path="/lab-interpreter" element={<LabInterpreter />} />
-              <Route path="/cases" element={<Cases />} />
-              <Route path="/learn" element={<Learn />} />
-              <Route path="/references" element={<References />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </main>
+          <div className="flex-1 flex flex-col">
+            <main id="main-content" className="flex-1 p-6 md:p-8 lg:p-10" role="main">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/calculators" element={<Calculators />} />
+                <Route path="/lab-interpreter" element={<LabInterpreter />} />
+                <Route path="/cases" element={<Cases />} />
+                <Route path="/learn" element={<Learn />} />
+                <Route path="/references" element={<References />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
         </div>
       </div>
     </BrowserRouter>
