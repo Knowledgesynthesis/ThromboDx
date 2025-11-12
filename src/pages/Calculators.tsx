@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/Button';
 import { PlasmicCalculator } from '@/components/calculators/PlasmicCalculator';
 import { DICCalculator } from '@/components/calculators/DICalculator';
 import { CoagulationPanelSimulator } from '@/components/lab/CoagulationPanelSimulator';
+import { HIT4TsCalculator } from '@/components/calculators/HIT4TsCalculator';
 
-type CalculatorType = 'plasmic' | 'dic' | 'coag' | null;
+type CalculatorType = 'plasmic' | 'dic' | 'coag' | 'hit' | null;
 
 export function Calculators() {
   const [activeCalculator, setActiveCalculator] = useState<CalculatorType>(null);
@@ -32,6 +33,13 @@ export function Calculators() {
       version: 'Interactive',
       useCase: 'Analyzes coagulation studies to differentiate consumptive vs other coagulopathies',
     },
+    {
+      id: 'hit' as const,
+      name: 'HIT 4Ts Score',
+      description: 'Heparin-induced thrombocytopenia assessment',
+      version: 'v2012',
+      useCase: 'Estimates pretest probability of HIT in patients receiving heparin',
+    },
   ];
 
   if (activeCalculator) {
@@ -45,6 +53,7 @@ export function Calculators() {
         {activeCalculator === 'plasmic' && <PlasmicCalculator />}
         {activeCalculator === 'dic' && <DICCalculator />}
         {activeCalculator === 'coag' && <CoagulationPanelSimulator />}
+        {activeCalculator === 'hit' && <HIT4TsCalculator />}
       </div>
     );
   }

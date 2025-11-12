@@ -6,6 +6,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
 import { useAppStore } from '@/store';
 import type { Syndrome } from '@/types';
+import { labPresets } from '@/data/labPresets';
 
 interface LabInputs {
   platelets: string;
@@ -39,9 +40,31 @@ export function MAHALabInterpreter() {
   });
 
   const [results, setResults] = useState<ProbabilityResult[] | null>(null);
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
+  const [showPresetInfo, setShowPresetInfo] = useState(false);
 
   const handleInputChange = (field: keyof LabInputs, value: string) => {
     setInputs((prev) => ({ ...prev, [field]: value }));
+    setResults(null);
+    setSelectedPreset('');
+    setShowPresetInfo(false);
+  };
+
+  const loadPreset = (presetId: string) => {
+    const preset = labPresets.find(p => p.id === presetId);
+    if (!preset) return;
+
+    setInputs({
+      platelets: preset.values.platelets.toString(),
+      hemoglobin: preset.values.hemoglobin.toString(),
+      ldh: preset.values.ldh.toString(),
+      haptoglobin: preset.values.haptoglobin.toString(),
+      indirectBilirubin: preset.values.indirectBilirubin.toString(),
+      creatinine: preset.values.creatinine.toString(),
+      schistocytes: preset.values.schistocytes,
+    });
+    setSelectedPreset(presetId);
+    setShowPresetInfo(true);
     setResults(null);
   };
 
@@ -396,6 +419,8 @@ export function MAHALabInterpreter() {
       schistocytes: 'none',
     });
     setResults(null);
+    setSelectedPreset('');
+    setShowPresetInfo(false);
   };
 
   const sortedResults = results?.sort((a, b) => b.score - a.score);
@@ -418,6 +443,52 @@ export function MAHALabInterpreter() {
               presentation and confirm with specialist evaluation.
             </AlertDescription>
           </Alert>
+
+          {/* Lab Presets */}
+          <Card className="bg-muted/30">
+            <CardHeader>
+              <CardTitle className="text-base">Load Educational Presets</CardTitle>
+              <CardDescription>
+                Pre-populated lab values for different pathologies at varying severity levels
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                {labPresets.map((preset) => (
+                  <Button
+                    key={preset.id}
+                    variant={selectedPreset === preset.id ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => loadPreset(preset.id)}
+                    className="text-xs h-auto py-2 px-3"
+                  >
+                    <div className="text-left">
+                      <div className="font-semibold">{preset.name}</div>
+                      <div className="text-[10px] opacity-70 capitalize">{preset.severity}</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+
+              {showPresetInfo && selectedPreset && (
+                <Alert variant="info" className="mt-4">
+                  <AlertDescription>
+                    <p className="font-medium mb-1">
+                      {labPresets.find(p => p.id === selectedPreset)?.description}
+                    </p>
+                    <p className="text-sm mt-2">
+                      {labPresets.find(p => p.id === selectedPreset)?.clinicalContext}
+                    </p>
+                    {labPresets.find(p => p.id === selectedPreset)?.references && (
+                      <p className="text-xs mt-2 opacity-70">
+                        References: {labPresets.find(p => p.id === selectedPreset)?.references?.join(', ')}
+                      </p>
+                    )}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Lab Inputs */}
           <div className="grid md:grid-cols-2 gap-6">
